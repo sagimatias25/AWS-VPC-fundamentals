@@ -41,18 +41,27 @@ graph TD
 
 ## Repository Structure
 
-* `docs/setup-guide.md`: Detailed step-by-step documentation of the configuration.
-* `scripts/verify_connectivity.sh`: Bash script used to validate network isolation and S3 access.
+* `docs/setup-guide.md`: Detailed step-by-step documentation (Network, IAM, Routing).
+* `scripts/verify_connectivity.sh`: Robust Bash script to validate network isolation.
+* `scripts/apply_security_groups.sh`: Utility to apply the JSON configurations via AWS CLI.
 * `examples/*.json`: Reference JSON structures for security groups.
 
-## ⚖️ Production Considerations (The "What Ifs")
+## ⚖️ Production Considerations (The "Gap Analysis")
 
-This lab implements a **Single-AZ** architecture for simplicity. In a real-world production environment, the following changes would be mandatory to ensure High Availability (HA) and resilience:
+This lab represents a foundational setup. To meet **Production Standards** in a modern enterprise environment (like Google/AWS), the following upgrades are mandatory:
 
-1.  **Multi-AZ Deployment:** Mirroring the Public/Private subnets across at least 2 Availability Zones (e.g., `us-east-1a` and `us-east-1b`) to survive a data center failure.
-2.  **Load Balancing:** Implementing an Application Load Balancer (ALB) in the Public subnets to distribute traffic.
-3.  **Auto Scaling:** Replacing standalone EC2 instances with Auto Scaling Groups (ASG) for self-healing.
-4.  **NACLs (Network ACLs):** Utilizing Stateless NACLs as an additional defense layer at the subnet boundary (e.g., for blocking specific malicious IP ranges), essentially acting as a firewall for the subnet itself.
+1.  **Eliminate SSH Bastions (Modern Access):** * Replace the Bastion Host with **AWS Systems Manager (SSM) Session Manager**.
+    * **Why:** This removes the need for open Port 22, manages access via IAM policies, and provides full session logging.
+
+2.  **Observability & Auditing:**
+    * Enable **VPC Flow Logs** (sending to CloudWatch or S3).
+    * **Why:** Without logs, debugging dropped packets or investigating security incidents in an isolated network is impossible.
+
+3.  **High Availability (HA):**
+    * Deploy across Multi-AZs (e.g., `us-east-1a` + `us-east-1b`) with an Application Load Balancer.
+
+4.  **Identity Management:**
+    * Enforce **Least Privilege** on IAM Roles (e.g., restrict S3 access to a specific bucket ARN instead of `AmazonS3ReadOnlyAccess`).
 
 ---
 
