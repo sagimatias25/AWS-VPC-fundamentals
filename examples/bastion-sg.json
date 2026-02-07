@@ -1,0 +1,7 @@
+{
+  "Description": "Bastion Host Security Group",
+  "SecurityGroupRules": [
+    { "Type": "Ingress", "IpProtocol": "tcp", "FromPort": 22, "ToPort": 22, "IpRanges": [{ "CidrIp": "YOUR_IP/32" }] },
+    { "Type": "Egress", "IpProtocol": "-1", "IpRanges": [{ "CidrIp": "0.0.0.0/0" }] }
+  ]
+}

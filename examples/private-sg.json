@@ -1,0 +1,7 @@
+{
+  "Description": "Private Server Security Group",
+  "SecurityGroupRules": [
+    { "Type": "Ingress", "IpProtocol": "tcp", "FromPort": 22, "ToPort": 22, "UserIdGroupPairs": [{ "GroupId": "sg-bastion-id" }] },
+    { "Type": "Egress", "IpProtocol": "-1", "IpRanges": [{ "CidrIp": "0.0.0.0/0" }] }
+  ]
+}
