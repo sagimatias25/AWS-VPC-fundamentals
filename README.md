@@ -45,12 +45,14 @@ graph TD
 * `scripts/verify_connectivity.sh`: Bash script used to validate network isolation and S3 access.
 * `examples/*.json`: Reference JSON structures for security groups.
 
-## Key Concepts
+## ⚖️ Production Considerations (The "What Ifs")
 
-* **CIDR Planning:** Designed a non-overlapping IP range (`192.168.0.0/20`) to allow future peering.
-* **Traffic Flow:** Managed Route Tables to strictly separate Public (IGW) and Private traffic.
-* **Security:** Implemented the Bastion Host pattern using specific Security Group referencing.
-* **Private Connectivity:** Configured **VPC Gateway Endpoints** to access S3 without a NAT Gateway.
+This lab implements a **Single-AZ** architecture for simplicity. In a real-world production environment, the following changes would be mandatory to ensure High Availability (HA) and resilience:
+
+1.  **Multi-AZ Deployment:** Mirroring the Public/Private subnets across at least 2 Availability Zones (e.g., `us-east-1a` and `us-east-1b`) to survive a data center failure.
+2.  **Load Balancing:** Implementing an Application Load Balancer (ALB) in the Public subnets to distribute traffic.
+3.  **Auto Scaling:** Replacing standalone EC2 instances with Auto Scaling Groups (ASG) for self-healing.
+4.  **NACLs (Network ACLs):** Utilizing Stateless NACLs as an additional defense layer at the subnet boundary (e.g., for blocking specific malicious IP ranges), essentially acting as a firewall for the subnet itself.
 
 ---
 
